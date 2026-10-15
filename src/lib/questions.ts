@@ -1,7 +1,7 @@
-import type { QuestionInput } from './api'
+import type { Question } from './api'
 
 // Offline bank for Practice mode. Same shape the backend stores.
-export const PRACTICE_BANK: QuestionInput[] = [
+export const PRACTICE_BANK: Question[] = [
   { Question: 'Which planet has the shortest day in the solar system?', Options: ['Earth', 'Jupiter', 'Mars', 'Mercury'], Correctoption: '1' },
   { Question: 'What does HTTP stand for?', Options: ['HyperText Transfer Protocol', 'High Transfer Text Process', 'Hosted Text Transport Path', 'Hyperlink Terminal Protocol'], Correctoption: '0' },
   { Question: 'Alpha brainwaves sit roughly in which frequency band?', Options: ['0.5–4 Hz', '4–8 Hz', '8–13 Hz', '13–30 Hz'], Correctoption: '2' },

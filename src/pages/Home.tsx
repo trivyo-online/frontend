@@ -87,7 +87,7 @@ export function Home({ onShape, onBand }: Props) {
           <SectionHead marker="C" title={<>SET THE<br />FREQUENCY</>}>
             Create an event, write your questions with four options each, then go live and watch answers stream in.
           </SectionHead>
-          <Button onClick={() => navigate('host')}>Host an event</Button>
+          <Button onClick={() => navigate('admin')}>Host an event</Button>
         </div>
       </section>
 
@@ -96,7 +96,10 @@ export function Home({ onShape, onBand }: Props) {
           <SectionHead marker="D" title={<>WARM UP<br />SOLO</>}>
             No room? Run a timed practice set offline. Same rules: one pick per question, fifty points when you’re right.
           </SectionHead>
-          <Button onClick={() => navigate('practice')}>Start practice</Button>
+          <div className="actions">
+            <Button onClick={() => navigate('practice')}>Start practice</Button>
+            <Button icon={false} onClick={() => navigate('ranks')}>Rankings</Button>
+          </div>
         </div>
       </section>
     </>

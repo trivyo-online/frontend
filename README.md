@@ -1,45 +1,52 @@
 # Trivyo — frontend
 
-Interface for live MCQ rooms, built on [trivyo-online/backend](https://github.com/trivyo-online/backend).
+Interface for live MCQ tests, built on [trivyo-online/backend](https://github.com/trivyo-online/backend).
 
-The look is monochrome retro: a near-black background, warm off-white type and a particle field that changes shape for each section (ring, loops, wave, grid, orbit). It also uses a high-contrast serif for display text, monospace labels, dashed chips and a film-grain overlay.
+The look is monochrome retro: a near-black background, warm off-white type and a particle field that changes shape for each section. It also uses a high-contrast serif for display text, monospace labels, dashed chips and a film-grain overlay.
 
 ## Run
 
 ```bash
 npm install
-cp .env.example .env   # point VITE_API_URL at the Go server (default http://localhost:8080)
+cp .env.example .env   # VITE_API_URL → the Go server (default http://localhost:8080)
 npm run dev
 ```
 
-`npm run build` type-checks and builds to `dist/`.
+`npm run build` type-checks and builds to `dist/`. It needs the backend running with MongoDB; see the backend README.
 
-## Sections
+## What's in it
 
-| Step | Route         | What it does |
-|------|---------------|--------------|
-| A    | `#/intro`     | Landing page. The particle field changes shape as you scroll |
-| B    | `#/join`      | Enter the room code, host ID and your name, then go to `#/play` |
-| —    | `#/play`      | Player screen. Opens `GET /api/connect` (WebSocket), shows questions as they arrive and sends answers |
-| C    | `#/host`      | Host console. **01** `POST /api/create-event` · **02** `POST /api/add-question` · **03** go live over `GET /api/host` (WebSocket) |
-| D    | `#/practice`  | Offline timed practice set (8 questions, 20 s each, 50 pts per correct answer) |
-| E    | `#/about`     | How the system fits together |
+| Step | Route | What it does |
+|---|---|---|
+| A | `#/intro` | Landing page |
+| B | `#/join?room=CODE` | Room code + name. Scanning a room's QR code opens this with the code filled in. For a scheduled test it waits and goes in automatically when the lobby opens |
+| — | `#/play` | Player screen: questions with a countdown, instant result, reveal, live ranking, final standings |
+| C | `#/admin` | Admin sign-in / sign-up and an events dashboard (Edit · Go live · QR · Results · Delete) |
+| — | `#/editor?room=` | Question editor: add, remove, reorder and copy questions; 2–6 options; mark the answer; per-question timer; scheduled start with auto-start; Ctrl/⌘+S |
+| — | `#/live?room=` | Host console: QR code and join code, player list, Start test, Reveal, Next, Auto-run, End, a live answer-distribution chart and the live ranking |
+| D | `#/practice` | Offline timed practice |
+| E | `#/ranks` | All-time ranking and recent rooms. `?room=` shows a room's standings, accuracy per question and how each question was answered |
 
-Keyboard: in any question, press `1`–`4` or `A`–`D` to answer.
-The wave button in the bottom-right corner pauses the background motion. The app also respects `prefers-reduced-motion`.
+```mermaid
+flowchart TD
+  Admin[Admin signs in] --> Edit[Editor: questions + timers]
+  Edit --> Sched{Schedule?}
+  Sched -->|auto-start| Lobby[Lobby opens 10 min early]
+  Sched -->|go live now| Lobby
+  Lobby --> QR[QR code / join code on screen]
+  QR --> Join[Players scan → enter name]
+  Join --> Play[Questions → answers → reveal]
+  Play --> End[Final standings]
+  End --> Ranks[Charts + all-time ranking]
+```
 
-## Socket protocol used
+## Built for poor networks
 
-- **Player → server**, answer: `{ "roomid", "userid", "questionno", "ans" }`. `ans` is the option *text*, which `HReadPump` compares to the correct option.
-- **Host → server**, question: `{ "type": "question", "roomid", "questionno", "question": { Question, Options, Correctoption, Eachquestiontime } }`
-- The player screen shows any relayed frame that contains `Question` + `Options`, whether at the top level or under `question`.
-- When the host console receives an answer frame, it sends that frame back on the host socket, because that is the channel the backend grades.
+- **Auto-reconnect.** Retries use exponential backoff with jitter, retry immediately when the device comes back online or the tab becomes visible again, and give up with a clear reason if the room has ended or the name is taken.
+- **Nothing is lost on a drop.** An answer given while offline is kept and sent on reconnect. The server sends back your score, the open question with the exact time left, and your earlier answer. Repeats never score twice.
+- **Clear status.** A banner says "Offline" or "Reconnecting · your answers and score are safe".
+- **Timers use the server's clock,** so a wrong phone clock or a slow frame doesn't change the countdown.
+- **Small downloads.** Pages load on demand: a player downloads about 75 KB of gzipped JS for the shell plus a few KB per page. The server compresses socket frames and JSON.
+- **Each browser has a private rejoin key,** so a refresh keeps your name and nobody else can take it.
 
-## Backend gaps to close
-
-The UI is ready for the following, but the current backend does not support it yet:
-
-1. `POST /api/create-event` returns the Mongo `id`, not the generated 8-character `RoomId`, so for now the host has to type the room code in.
-2. Frames the host sends are graded but never broadcast to players, so **Push a question** has no effect until `HReadPump` forwards `type: "question"` frames to `room.Broadcast`.
-3. `HostConnection` / `ConnecttoRoom` query Mongo with `"RoomId"` / `"HostID"`, but the event is stored with the bson key `roomid`, so lookups can miss.
-4. `HReadPump` reads the quiz from `event:<userid>` rather than `event:<roomid>`.
+Keyboard: `1`–`4` or `A`–`D` answers. The wave button in the bottom-right corner pauses the background motion. The app also respects `prefers-reduced-motion`.

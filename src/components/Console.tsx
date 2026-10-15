@@ -10,6 +10,19 @@ export function StatusPill({ status }: { status: SocketStatus }) {
   )
 }
 
+/** Sticky banner while the connection is down; the app keeps retrying. */
+export function NetBanner({ status, attempt }: { status: SocketStatus; attempt: number }) {
+  if (status !== 'reconnecting' && status !== 'offline') return null
+  return (
+    <div className="netbar" role="status" aria-live="polite">
+      <span className="pulse small" aria-hidden="true" />
+      {status === 'offline'
+        ? 'YOU’RE OFFLINE · WE’LL REJOIN AS SOON AS THE NETWORK IS BACK'
+        : `RECONNECTING${attempt > 1 ? ` · TRY ${attempt}` : ''} · YOUR ANSWERS AND SCORE ARE SAFE`}
+    </div>
+  )
+}
+
 export function Console({ log, title = 'SIGNAL LOG' }: { log: LogEntry[]; title?: string }) {
   const box = useRef<HTMLDivElement>(null)
   useEffect(() => {

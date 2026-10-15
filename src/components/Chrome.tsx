@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { STEPS, navigate, type Route } from '../lib/router'
+import { STEPS, STEP_OF, navigate, type Route } from '../lib/router'
 
 export function Logo() {
   return (
@@ -16,7 +16,7 @@ export function Logo() {
 }
 
 export function Nav({ route }: { route: Route }) {
-  const activeKey = route === 'play' ? 'join' : route
+  const activeKey = STEP_OF[route]
   return (
     <header className="topbar">
       <Logo />

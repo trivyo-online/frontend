@@ -3,10 +3,11 @@ import { API_URL } from '../lib/api'
 import { navigate } from '../lib/router'
 
 const ROWS = [
-  ['01', 'HOST', 'Creates an event and writes four-option questions.'],
-  ['02', 'ROOM', 'Goes live — the room opens a WebSocket channel.'],
-  ['03', 'PLAYERS', 'Join with the room code, the host ID and a name.'],
-  ['04', 'SCORE', 'Each correct answer adds 50 points to your tally.'],
+  ['01', 'ADMIN', 'Signs in, creates an event and writes questions in the editor.'],
+  ['02', 'ROOM', 'Goes live: the host steps through questions, reveals answers, ends.'],
+  ['03', 'PLAYERS', 'Join with the room code and a name. One answer per question.'],
+  ['04', 'SCORE', 'Each correct answer is 50 points; ties go to the faster player.'],
+  ['05', 'RANKS', 'Room standings, per-question charts and an all-time leaderboard.'],
 ]
 
 export function About() {
