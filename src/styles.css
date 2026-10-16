@@ -447,6 +447,23 @@ button:disabled {
   gap: 0.9em;
 }
 
+.hero-title.quote {
+  font-size: clamp(32px, 5.4vw, 80px);
+}
+
+.hero-title.quote .row {
+  flex-wrap: wrap;
+  gap: 0 0.45em;
+}
+
+.hero-cite {
+  margin-top: 18px;
+  font-style: normal;
+  text-shadow: none;
+  color: var(--dim);
+  animation: rise 1s var(--ease) 0.9s both;
+}
+
 .hero-title span span {
   display: inline-block;
   animation: rise 1s var(--ease) both;
@@ -468,12 +485,6 @@ button:disabled {
   font-size: 14px;
   line-height: 1.45;
   color: var(--ink-2);
-}
-
-.hero-note {
-  display: block;
-  margin-top: 10px;
-  color: var(--dim);
 }
 
 .chevron {
