@@ -470,6 +470,12 @@ button:disabled {
   color: var(--ink-2);
 }
 
+.hero-note {
+  display: block;
+  margin-top: 10px;
+  color: var(--dim);
+}
+
 .chevron {
   position: absolute;
   bottom: 52px;

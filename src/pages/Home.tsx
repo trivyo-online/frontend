@@ -60,6 +60,7 @@ export function Home({ onShape, onBand }: Props) {
         </h1>
         <p className="hero-copy">
           Trivyo runs live multiple-choice rooms. A host opens a room, players join with a code, and every answer is scored the moment it lands.
+          <span className="hero-note mono">Stanly code: I guess one person can make a difference</span>
         </p>
         <a className="chevron" href="#how" aria-label="Scroll to how it works" onClick={(e) => {
           e.preventDefault()

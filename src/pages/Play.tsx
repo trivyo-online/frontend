@@ -87,6 +87,18 @@ export function Play({ params }: { params: URLSearchParams }) {
         setBoard(f.leaderboard)
         setEnded(true)
         break
+      case 'reset':
+        // The host cleared the room; the socket closes and we rejoin a fresh lobby.
+        pending.current = null
+        setQ(null)
+        setPicked(null)
+        setResult(null)
+        setAnswerIdx(null)
+        setScore(0)
+        setBoard([])
+        setStartsAt(0)
+        setProblem(f.message ? 'The host reset the room. You’re back in the lobby with a fresh score.' : '')
+        break
       case 'error':
         if (f.code === 'late' || f.code === 'closed' || f.code === 'invalid') pending.current = null
         if (f.code === 'late') setProblem('That one arrived after time ran out.')

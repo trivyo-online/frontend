@@ -139,6 +139,9 @@ export const createEvent = (e: { Nameofroom: string; DateofQuiz: string; StartTi
 export const saveEvent = (roomid: string, e: Pick<EventDoc, 'Nameofroom' | 'DateofQuiz' | 'StartTime' | 'Questions' | 'ScheduledAt' | 'AutoStart'>) =>
   req<{ event: EventDoc }>('PUT', `/api/admin/events/${roomid}`, e, true)
 export const deleteEvent = (roomid: string) => req<{ message: string }>('DELETE', `/api/admin/events/${roomid}`, undefined, true)
+/** Clears a test's players and answers so it can run again; a live room goes back to its lobby. */
+export const resetEvent = (roomid: string) =>
+  req<{ message: string; players: number; answers: number; live: boolean }>('POST', `/api/admin/events/${roomid}/reset`, undefined, true)
 
 // ─── Public ────────────────────────────────────────────────────────────
 
@@ -197,6 +200,8 @@ export type ServerFrame =
   | { type: 'reveal'; questionno: number; correctoption: number; stats: QStat | null }
   | { type: 'room'; room: RoomSummary }
   | { type: 'end'; leaderboard: BoardEntry[] }
+  /** Players get a message just before they are disconnected; hosts get the emptied room. */
+  | { type: 'reset'; message?: string; room?: RoomSummary; players?: number; answers?: number }
   | { type: 'error'; code?: string; message: string; questionno?: number }
   | { type: 'pong'; now: number }
 
