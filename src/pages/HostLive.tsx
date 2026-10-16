@@ -3,7 +3,7 @@ import { Distribution, Leaderboard, StatTile } from '../components/Charts'
 import { Console, NetBanner, StatusPill } from '../components/Console'
 import { SharePanel } from '../components/Share'
 import { Button, Notice, SectionHead } from '../components/UI'
-import { asFrame, getEvent, hostSocketUrl, type BoardEntry, type EventDoc, type RoomSummary } from '../lib/api'
+import { asFrame, getEvent, resetEvent, hostSocketUrl, type BoardEntry, type EventDoc, type RoomSummary } from '../lib/api'
 import { navigate } from '../lib/router'
 import { useCountdown } from '../lib/useCountdown'
 import { useSession } from '../lib/useSession'
@@ -27,6 +27,8 @@ export function HostLive({ params }: { params: URLSearchParams }) {
   const [board, setBoard] = useState<BoardEntry[]>([])
   const [ended, setEnded] = useState(false)
   const [notice, setNotice] = useState('')
+  const [info, setInfo] = useState('')
+  const [resetting, setResetting] = useState(false)
 
   useEffect(() => {
     if (!session) {
@@ -78,6 +80,15 @@ export function HostLive({ params }: { params: URLSearchParams }) {
         setBoard(f.leaderboard)
         setEnded(true)
         break
+      case 'reset':
+        if (f.room) setSummary(f.room)
+        setOpen(null)
+        setCounts([])
+        setRevealed(false)
+        setBoard([])
+        setNotice('')
+        setInfo(`Players reset: ${f.players ?? 0} removed, ${f.answers ?? 0} answers cleared.`)
+        break
       case 'error':
         setNotice(f.message)
         break
@@ -98,7 +109,37 @@ export function HostLive({ params }: { params: URLSearchParams }) {
 
   const cmd = (payload: object) => {
     setNotice('')
+    setInfo('')
     if (!send(payload)) setNotice('Not connected; try again in a moment.')
+  }
+
+  const confirmReset = () =>
+    window.confirm('Reset players? Everyone is removed, all answers for this test are cleared and the room goes back to its lobby.')
+
+  // While connected the host socket resets the live room; after the test has
+  // ended (socket closed) the API clears it and we reopen the lobby.
+  const resetPlayers = async () => {
+    if (!confirmReset()) return
+    if (!ended) {
+      cmd({ type: 'reset' })
+      return
+    }
+    setNotice('')
+    setResetting(true)
+    try {
+      const r = await resetEvent(room)
+      setBoard([])
+      setPlayers([])
+      setOpen(null)
+      setCounts([])
+      setRevealed(false)
+      setEnded(false)
+      setInfo(`Players reset: ${r.players} removed, ${r.answers} answers cleared.`)
+    } catch (e) {
+      setNotice((e as Error).message)
+    } finally {
+      setResetting(false)
+    }
   }
 
   if (err) {
@@ -148,10 +189,14 @@ export function HostLive({ params }: { params: URLSearchParams }) {
               <Leaderboard entries={board} />
               <div className="actions">
                 <Button onClick={() => navigate('ranks', { room })}>Open results & charts</Button>
+                <Button icon={false} onClick={resetPlayers} disabled={resetting} title="Clear players and answers so the test can run again">
+                  {resetting ? 'Resetting…' : 'Reset players'}
+                </Button>
                 <Button icon={false} onClick={() => navigate('admin')}>
                   Back to events
                 </Button>
               </div>
+              {notice && <Notice tone="error">{notice}</Notice>}
             </>
           ) : (
             <>
@@ -168,6 +213,7 @@ export function HostLive({ params }: { params: URLSearchParams }) {
               )}
 
               {notice && <Notice tone="error">{notice}</Notice>}
+              {info && <Notice tone="ok">{info}</Notice>}
 
               <div className="actions">
                 {!auto && nextQ && (
@@ -191,6 +237,9 @@ export function HostLive({ params }: { params: URLSearchParams }) {
                 )}
                 <Button icon={false} onClick={() => window.confirm('End the test for everyone?') && cmd({ type: 'end' })} disabled={status !== 'open'}>
                   End test
+                </Button>
+                <Button icon={false} onClick={resetPlayers} disabled={status !== 'open'} title="Remove every player and clear their answers, back to the lobby">
+                  Reset players
                 </Button>
               </div>
 
