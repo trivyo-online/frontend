@@ -2130,15 +2130,30 @@ details.console .console {
 
 @media (max-width: 720px) {
   .powered {
+    flex-direction: column;
+    gap: 10px;
+    width: min(300px, calc(100% - 32px));
+    padding: 14px 16px 12px;
     border-radius: 16px;
-    gap: 8px 14px;
   }
-  .powered > .mono {
-    flex-basis: 100%;
+  .powered-brand {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  .powered-brand > span {
+    align-items: center;
+  }
+  .gdg-mark {
+    width: 40px;
+    height: 20px;
   }
   .google-word {
     font-size: 18px;
-    padding-left: 0;
+    padding: 8px 0 0;
     border-left: 0;
+    border-top: 1px solid var(--line);
+    width: 100%;
+    text-align: center;
   }
 }
