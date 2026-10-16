@@ -8,6 +8,44 @@ interface Props {
   onBand: (b: number) => void
 }
 
+const QUOTE = [
+  ['I', 'GUESS', 'ONE', 'PERSON'],
+  ['CAN', 'MAKE', 'A', 'DIFFERENCE'],
+]
+
+/** The Google Developer Groups bracket mark, in Google's four colours. */
+function GdgMark() {
+  return (
+    <svg className="gdg-mark" viewBox="0 0 48 24" aria-hidden="true">
+      <g fill="none" strokeWidth="5" strokeLinecap="round">
+        <path d="M17 4 6 12" stroke="#ea4335" />
+        <path d="M6 12l11 8" stroke="#4285f4" />
+        <path d="M31 4l11 8" stroke="#34a853" />
+        <path d="M42 12 31 20" stroke="#fbbc04" />
+      </g>
+    </svg>
+  )
+}
+
+function PoweredBy() {
+  return (
+    <div className="powered" title="Powered by Google Developer Groups on Campus, SKNCOE, and Google">
+      <span className="powered-by">Powered by</span>
+      <GdgMark />
+      <strong>GDGoC SKNCOE</strong>
+      <span className="powered-dot" aria-hidden="true">·</span>
+      <span className="google-word">
+        <span style={{ color: '#4285f4' }}>G</span>
+        <span style={{ color: '#ea4335' }}>o</span>
+        <span style={{ color: '#fbbc04' }}>o</span>
+        <span style={{ color: '#4285f4' }}>g</span>
+        <span style={{ color: '#34a853' }}>l</span>
+        <span style={{ color: '#ea4335' }}>e</span>
+      </span>
+    </div>
+  )
+}
+
 const SECTIONS: { shape: FieldShape; band: number }[] = [
   { shape: 'ring', band: 2 },
   { shape: 'loops', band: 1 },
@@ -43,21 +81,23 @@ export function Home({ onShape, onBand }: Props) {
       <section className="screen hero" ref={reg(0)} data-i={0}>
         <Tag style={{ top: '22%', left: '14%' }} className="float">LIVE ROOMS</Tag>
         <Tag style={{ top: '22%', right: '14%' }} className="float">4 OPTIONS</Tag>
-        <Tag style={{ top: '64%', right: '30%' }} className="float">+50 PTS</Tag>
+        <Tag style={{ top: '40%', right: '5%' }} className="float">+50 PTS</Tag>
         <Tag style={{ bottom: '18%', left: '9%' }} className="float">20 SEC</Tag>
         <Tag style={{ bottom: '20%', right: '7%' }} className="float">RANKING</Tag>
 
-        <h1 className="display hero-title">
-          <span className="row">
-            <span>IT’S</span>
-            <span>TIME</span>
-          </span>
-          <span className="row wide">
-            <span>TO</span>
-            <span>TEST</span>
-            <span>IT</span>
-          </span>
+        <h1 className="display hero-title quote">
+          {QUOTE.map((row, r) => (
+            <span key={r} className="row">
+              {row.map((w, i) => (
+                <span key={w} style={{ animationDelay: `${0.05 + (r * 3 + i) * 0.1}s` }}>
+                  {w}
+                </span>
+              ))}
+            </span>
+          ))}
+          <cite className="mono hero-cite">— STANLY CODE</cite>
         </h1>
+        <PoweredBy />
         <p className="hero-copy">
           Trivyo runs live multiple-choice rooms. A host opens a room, players join with a code, and every answer is scored the moment it lands.
         </p>

@@ -447,6 +447,60 @@ button:disabled {
   gap: 0.9em;
 }
 
+.hero-title.quote {
+  font-size: clamp(32px, 5.4vw, 80px);
+}
+
+.hero-title.quote .row {
+  flex-wrap: wrap;
+  gap: 0 0.45em;
+}
+
+.hero-cite {
+  margin-top: 18px;
+  font-style: normal;
+  text-shadow: none;
+  color: var(--dim);
+  animation: rise 1s var(--ease) 0.9s both;
+}
+
+.powered {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 22px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.55);
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  animation: rise 1s var(--ease) 1.1s both;
+}
+
+.powered-by,
+.powered-dot {
+  color: var(--dim);
+}
+
+.powered strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.gdg-mark {
+  width: 20px;
+  height: 10px;
+  flex: none;
+}
+
+.google-word {
+  font-family: 'Product Sans', 'Google Sans', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+}
+
 .hero-title span span {
   display: inline-block;
   animation: rise 1s var(--ease) both;
