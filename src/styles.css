@@ -497,6 +497,10 @@ button:disabled {
   color: var(--ink);
 }
 
+.powered-chapter {
+  text-transform: none;
+}
+
 .gdg-mark {
   width: 34px;
   height: 17px;
@@ -2134,5 +2138,7 @@ details.console .console {
   }
   .google-word {
     font-size: 18px;
+    padding-left: 0;
+    border-left: 0;
   }
 }

@@ -29,13 +29,13 @@ function GdgMark() {
 
 function PoweredBy() {
   return (
-    <div className="powered" aria-label="Powered by Google Developer Groups GDG SKNCOE and Google">
+    <div className="powered" aria-label="Powered by Google Developer Groups on Campus GDGoC SKNCOE and Google">
       <span className="mono dim">POWERED BY</span>
       <span className="powered-brand">
         <GdgMark />
         <span>
-          <strong>Google Developer Groups</strong>
-          <span className="mono dim">GDG SKNCOE</span>
+          <strong>Google Developer Groups on Campus</strong>
+          <span className="mono dim powered-chapter">GDGoC SKNCOE</span>
         </span>
       </span>
       <span className="google-word" aria-hidden="true">
