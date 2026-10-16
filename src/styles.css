@@ -465,55 +465,40 @@ button:disabled {
 }
 
 .powered {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  margin-top: 26px;
-  padding: 8px 16px;
-  border: 1px solid var(--line, rgba(255, 255, 255, 0.14));
+  gap: 7px;
+  margin-top: 22px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
   border-radius: 999px;
   background: rgba(10, 10, 10, 0.55);
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
   animation: rise 1s var(--ease) 1.1s both;
 }
 
-.powered-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-align: left;
+.powered-by,
+.powered-dot {
+  color: var(--dim);
 }
 
-.powered-brand > span {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.powered-brand strong {
-  font-size: 13px;
+.powered strong {
   font-weight: 500;
   color: var(--ink);
 }
 
-.powered-chapter {
-  text-transform: none;
-}
-
 .gdg-mark {
-  width: 34px;
-  height: 17px;
+  width: 20px;
+  height: 10px;
   flex: none;
 }
 
 .google-word {
   font-family: 'Product Sans', 'Google Sans', Arial, sans-serif;
-  font-size: 20px;
   font-weight: 500;
-  letter-spacing: -0.01em;
-  padding-left: 16px;
-  border-left: 1px solid var(--line, rgba(255, 255, 255, 0.14));
+  font-size: 13px;
 }
 
 .hero-title span span {
@@ -2125,20 +2110,5 @@ details.console .console {
   }
   .tiles .stat {
     padding: 12px;
-  }
-}
-
-@media (max-width: 720px) {
-  .powered {
-    border-radius: 16px;
-    gap: 8px 14px;
-  }
-  .powered > .mono {
-    flex-basis: 100%;
-  }
-  .google-word {
-    font-size: 18px;
-    padding-left: 0;
-    border-left: 0;
   }
 }
