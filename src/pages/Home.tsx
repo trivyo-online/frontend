@@ -8,6 +8,11 @@ interface Props {
   onBand: (b: number) => void
 }
 
+const QUOTE = [
+  ['I', 'GUESS', 'ONE', 'PERSON'],
+  ['CAN', 'MAKE', 'A', 'DIFFERENCE'],
+]
+
 const SECTIONS: { shape: FieldShape; band: number }[] = [
   { shape: 'ring', band: 2 },
   { shape: 'loops', band: 1 },
@@ -47,20 +52,20 @@ export function Home({ onShape, onBand }: Props) {
         <Tag style={{ bottom: '18%', left: '9%' }} className="float">20 SEC</Tag>
         <Tag style={{ bottom: '20%', right: '7%' }} className="float">RANKING</Tag>
 
-        <h1 className="display hero-title">
-          <span className="row">
-            <span>IT’S</span>
-            <span>TIME</span>
-          </span>
-          <span className="row wide">
-            <span>TO</span>
-            <span>TEST</span>
-            <span>IT</span>
-          </span>
+        <h1 className="display hero-title quote">
+          {QUOTE.map((row, r) => (
+            <span key={r} className="row">
+              {row.map((w, i) => (
+                <span key={w} style={{ animationDelay: `${0.05 + (r * 3 + i) * 0.1}s` }}>
+                  {w}
+                </span>
+              ))}
+            </span>
+          ))}
+          <cite className="mono hero-cite">— STANLY CODE</cite>
         </h1>
         <p className="hero-copy">
           Trivyo runs live multiple-choice rooms. A host opens a room, players join with a code, and every answer is scored the moment it lands.
-          <span className="hero-note mono">Stanly code: I guess one person can make a difference</span>
         </p>
         <a className="chevron" href="#how" aria-label="Scroll to how it works" onClick={(e) => {
           e.preventDefault()
